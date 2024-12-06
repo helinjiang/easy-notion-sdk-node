@@ -1,0 +1,6 @@
+spec: 'test/scripts/**/*.ts'
+require:
+  - 'test/setup.js'
+  - 'tsx'
+reporter: 'spec'
+recursive: true
