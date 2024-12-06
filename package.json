@@ -1,0 +1,16 @@
+{
+  "name": "easy-notion-sdk-node",
+  "version": "0.1.0",
+  "description": "A simpler and more user-friendly Notion SDK tool 更简单易用的 notion sdk 工具",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "notion",
+    "sdk",
+    "node"
+  ],
+  "author": "helinjiang",
+  "license": "MIT"
+}
