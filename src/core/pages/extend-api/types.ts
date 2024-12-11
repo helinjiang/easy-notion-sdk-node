@@ -26,3 +26,8 @@ export type ICreateInPageParameters = WithExclude<
   IRawNotionClientSDKTypes.CreatePageParameters,
   'parent' | 'properties' | 'content'
 >;
+
+export type ICreateInDatabaseParameters = ChangeToOption<
+  Pick<IRawNotionClientSDKTypes.CreatePageParameters, 'properties' | 'icon' | 'cover' | 'children'>,
+  'properties' | 'icon' | 'cover' | 'children'
+>;

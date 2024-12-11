@@ -5,6 +5,10 @@ declare global {
   type WithExclude<T, K extends keyof T> = {
     [key in Exclude<keyof T, K>]: T[key];
   };
+
+  type ChangeToOption<T, K extends keyof T> = {
+    [key in K]?: T[key];
+  };
 }
 
 /* 文件内必须包含一个 export 语句 */
