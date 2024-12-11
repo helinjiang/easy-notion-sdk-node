@@ -1,4 +1,4 @@
-import { createNotionClientSDK, INotionClientSDK, INotionTokenOrClientSDK } from '../../../notion-client-sdk';
+import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { getStandardTitle } from '../../../helpers/platform-rule';
 
 import { IRawQueryRecord } from '../../raw-types';
@@ -13,7 +13,7 @@ import { IFetchRemoteParams, IReqInfo, IVerifyResultItem } from './types';
  * database 基类
  */
 export default class DomainBase<T_DATA, T_RECORD> {
-  public notionClientSDK: INotionClientSDK;
+  public notionClientSDK: IRawNotionClientSDKTypes.IClientSDK;
 
   /**
    * 请求 database 的基础信息
@@ -30,7 +30,7 @@ export default class DomainBase<T_DATA, T_RECORD> {
    */
   public databaseIdInUrl: string;
 
-  constructor(notionTokenOrClientSDK: INotionTokenOrClientSDK, reqInfo: IReqInfo) {
+  constructor(notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK, reqInfo: IReqInfo) {
     this.notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
     this.databaseIdInUrl = getPageIdInUrl(reqInfo.url);
@@ -47,10 +47,11 @@ export default class DomainBase<T_DATA, T_RECORD> {
     // 获取 database 中的记录
 
     // 是否需要拉取所有的记录，目前的场景下，大部分是需要拉取所有记录的，因此，默认值为 true
-    const shouldFetchAllRecords = (typeof params?.shouldFetchAllRecords === 'boolean') ? params?.shouldFetchAllRecords : true;
+    const shouldFetchAllRecords =
+      typeof params?.shouldFetchAllRecords === 'boolean' ? params?.shouldFetchAllRecords : true;
     const databaseQueryRes = await extendAPI.query(this.notionClientSDK, this.databaseIdInUrl, {
       ...params,
-      shouldFetchAllRecords
+      shouldFetchAllRecords,
     });
     const rawRecords = (databaseQueryRes.results || []) as unknown as IRawQueryRecord[];
 
@@ -77,12 +78,11 @@ export default class DomainBase<T_DATA, T_RECORD> {
     } as T_DATA;
   }
 
-
   /**
    * 自我检查，将一些不符合的情况暴露出来，以便人工去修正
-   * @param handlePage 
-   * @param handleBlocks 
-   * @returns 
+   * @param handlePage
+   * @param handleBlocks
+   * @returns
    */
   public async verify(
     handlePage?: (record: T_RECORD) => Promise<string[]>,
@@ -102,7 +102,7 @@ export default class DomainBase<T_DATA, T_RECORD> {
 
     // 依次（并发）进行请求这些页面，获取其 block 等信息，如果分析有问题，则记录到结果中
     // @ts-ignore
-    const parsedRecords = (this.data.parsedRecords || []);
+    const parsedRecords = this.data.parsedRecords || [];
     console.log(`共 ${parsedRecords.length} 条记录，开始检查...`);
 
     for (let i = 0; i < parsedRecords.length; i++) {
@@ -136,12 +136,12 @@ export default class DomainBase<T_DATA, T_RECORD> {
         }
 
         // 检查 page 的其他属性
-        if ((typeof handlePage === 'function')) {
+        if (typeof handlePage === 'function') {
           this.addWarningTips(await handlePage(record), warningTips);
         }
 
         // 检查 blocks
-        if ((typeof handleBlocks === 'function')) {
+        if (typeof handleBlocks === 'function') {
           const blockChildrenListRes = await this.notionClientSDK.blocks.children.list({
             block_id: record.pageId,
           });
@@ -164,15 +164,17 @@ export default class DomainBase<T_DATA, T_RECORD> {
       console.log(`耗时： ${(Date.now() - listT1).toFixed(0)} ms`);
     }
 
-    console.log(`\n检查完成，总耗时${(Date.now() - t1).toFixed(0)} ms，不合格情况为: ${results.length}/${parsedRecords.length}`);
+    console.log(
+      `\n检查完成，总耗时${(Date.now() - t1).toFixed(0)} ms，不合格情况为: ${results.length}/${parsedRecords.length}`
+    );
 
     return results;
   }
 
   /**
    * 将 database 中的原始记录数据解析为一个标准的数据记录
-   * @param rawPropertyDefineMap 
-   * @param rawRecord 
+   * @param rawPropertyDefineMap
+   * @param rawRecord
    */
   public parseForOne(
     rawPropertyDefineMap: Record<string, IPropertyHandlerTypes.IRawDefine>,
@@ -184,45 +186,45 @@ export default class DomainBase<T_DATA, T_RECORD> {
 
   /**
    * 更新 page 的标题
-   * @param pageId 
-   * @param newTitle 
-   * @returns 
+   * @param pageId
+   * @param newTitle
+   * @returns
    */
   public async updatePageTitle(pageId: string, newTitle: string) {
     return this.notionClientSDK.pages.update({
       page_id: pageId,
-      "properties": {
+      properties: {
         title: [
           {
-            "text": {
-              "content": newTitle
-            }
-          }
-        ]
-      }
+            text: {
+              content: newTitle,
+            },
+          },
+        ],
+      },
     });
   }
 
   /**
    * 更新 page 的 property 为 Text 的值
-   * 
-   * @param pageId 
-   * @param propertyName 字段名 
-   * @param newValue 
-   * @returns 
+   *
+   * @param pageId
+   * @param propertyName 字段名
+   * @param newValue
+   * @returns
    */
   public async updatePagePropertyText(pageId: string, propertyName: string, newValue: string) {
     return this.notionClientSDK.pages.update({
       page_id: pageId,
-      "properties": {
+      properties: {
         [propertyName]: [
           {
-            "text": {
-              "content": newValue
-            }
-          }
-        ]
-      }
+            text: {
+              content: newValue,
+            },
+          },
+        ],
+      },
     });
   }
 

@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
-import { createNotionClientSDK, INotionTokenOrClientSDK } from '../../../notion-client-sdk';
+import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { IRawQueryRecord } from '../../raw-types';
 
 import { IChildrenListParams, IGetAppendBlocksRes } from './types';
 
 export const childrenList = async (
-  notionTokenOrClientSDK: INotionTokenOrClientSDK,
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   blockId: string,
   params?: IChildrenListParams
 ) => {
@@ -14,7 +14,7 @@ export const childrenList = async (
 
   // 获取记录
   const queryParams = {
-    block_id: blockId
+    block_id: blockId,
   };
 
   const t1 = Date.now();
@@ -35,7 +35,6 @@ export const childrenList = async (
 
   console.log(`分页请求第 ${1} 次，请求参数： ${JSON.stringify(queryParams)}`);
   console.log(`分页请求第 ${1} 次，返回数量： ${rawRecords.length} 条，耗时：${(Date.now() - t1).toFixed(0)} ms`);
-
 
   let i = 2;
 
@@ -72,20 +71,20 @@ export const childrenList = async (
 
 /**
  * 在页面中追加 blocks
- * @param pageId 
- * @param appendBlocks 
- * @returns 
+ * @param pageId
+ * @param appendBlocks
+ * @returns
  */
 export const childrenAppend = async (
-  notionTokenOrClientSDK: INotionTokenOrClientSDK,
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   pageId: string,
   appendBlocks: any[]
 ): Promise<any[]> => {
   // 如果 appendBlocks 数量大于 100，则需要分页，否则会报如下错误
   // body failed validation: body.children.length should be ≤ `100`, instead was `170`.
-  // 
+  //
   // 详见： https://developers.notion.com/reference/patch-block-children
-  // There is a limit of 100 block children that can be appended by a single API request. 
+  // There is a limit of 100 block children that can be appended by a single API request.
   // Arrays of block children longer than 100 will result in an error.
 
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
@@ -94,7 +93,7 @@ export const childrenAppend = async (
   if (appendBlocks.length <= 100) {
     const res = await notionClientSDK.blocks.children.append({
       block_id: pageId,
-      children: appendBlocks
+      children: appendBlocks,
     });
 
     return [res];
@@ -112,7 +111,7 @@ export const childrenAppend = async (
 
     const res = await notionClientSDK.blocks.children.append({
       block_id: pageId,
-      children: children
+      children: children,
     });
 
     responseArr.push(res);
@@ -125,38 +124,31 @@ export const childrenAppend = async (
  * 从一个页面中 copy 所有的 blocks 到另外一个页面
  */
 export const copyAllBlocksOfPageFromOneToAnother = async (
-  notionTokenOrClientSDK: INotionTokenOrClientSDK,
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   sourcePageId: string,
   distPageId: string
 ) => {
-  const { list: appendBlocks } = await getAppendBlocks(
-    notionTokenOrClientSDK,
-    sourcePageId
-  );
+  const { list: appendBlocks } = await getAppendBlocks(notionTokenOrClientSDK, sourcePageId);
 
-  const distRes = await childrenAppend(
-    notionTokenOrClientSDK,
-    distPageId,
-    appendBlocks,
-  );
+  const distRes = await childrenAppend(notionTokenOrClientSDK, distPageId, appendBlocks);
 
   return [appendBlocks, distRes];
 };
 
 /**
  * 获得一个页面中可以去追加到其他页面的 blocks
- * @param notionTokenOrClientSDK 
- * @param pageId 
- * @returns 
+ * @param notionTokenOrClientSDK
+ * @param pageId
+ * @returns
  */
 export const getAppendBlocks = async (
-  notionTokenOrClientSDK: INotionTokenOrClientSDK,
-  pageId: string,
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  pageId: string
 ): Promise<IGetAppendBlocksRes> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
   const sourceRes = await childrenList(notionClientSDK, pageId, {
-    shouldFetchAllRecords: true
+    shouldFetchAllRecords: true,
   });
 
   const appendBlocks: any[] = [];
@@ -176,12 +168,12 @@ export const getAppendBlocks = async (
     if (one.type === 'synced_block' && !one.synced_block.synced_from) {
       appendBlocks.push({
         type: one.type,
-        "synced_block": {
-          "synced_from": {
-            "type": "block_id",
-            "block_id": one.id
-          }
-        }
+        synced_block: {
+          synced_from: {
+            type: 'block_id',
+            block_id: one.id,
+          },
+        },
       });
       return;
     }
@@ -192,14 +184,14 @@ export const getAppendBlocks = async (
 
   return {
     list: appendBlocks,
-    warningTips
+    warningTips,
   };
 };
 
 /**
  * 获得不支持 copy 同步块的 tips，如果返回空字符串，则说明是支持 copy 的
- * @param block 
- * @returns 
+ * @param block
+ * @returns
  */
 export const getUnSupportCopyTips = (block: any): string => {
   // 分栏

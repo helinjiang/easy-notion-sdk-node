@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { createNotionClientSDK, INotionTokenOrClientSDK } from '../../../notion-client-sdk';
+import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { IRawQueryRecord } from '../../raw-types';
 
 import { IQueryParams } from './types';
@@ -8,13 +8,13 @@ import { IQueryParams } from './types';
 /**
  * 查询 database 中的数据列表
  * https://developers.notion.com/reference/post-database-query
- * @param notionTokenOrClientSDK 
- * @param databaseId 
- * @param params 
- * @returns 
+ * @param notionTokenOrClientSDK
+ * @param databaseId
+ * @param params
+ * @returns
  */
 export const query = async (
-  notionTokenOrClientSDK: INotionTokenOrClientSDK,
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   databaseId: string,
   params?: IQueryParams
 ) => {
@@ -53,7 +53,6 @@ export const query = async (
 
   console.log(`分页请求第 ${1} 次，请求参数： ${JSON.stringify(queryParams)}`);
   console.log(`分页请求第 ${1} 次，返回数量： ${rawRecords.length} 条，耗时：${(Date.now() - t1).toFixed(0)} ms`);
-
 
   let i = 2;
 
