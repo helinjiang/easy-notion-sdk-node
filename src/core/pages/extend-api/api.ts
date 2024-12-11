@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
-import { ICreateInPageParameters, ICreateInDatabaseParameters } from './types';
+import { ICreateInPageParameters, ICreateInDatabaseParameters, IUpdateParameters } from './types';
 
 /**
  * 创建一篇文档，挂载在 page 类型文档下
@@ -115,4 +115,43 @@ export const createInDatabase = async (
   }
 
   return notionClientSDK.pages.create(createPageParameters);
+};
+
+/**
+ * 更新一篇文档的信息
+ * https://developers.notion.com/reference/post-page
+ * @param notionTokenOrClientSDK
+ * @param pageId 文档 ID
+ * @param titlePlainText 文档标题
+ * @param parameters 额外的参数
+ * @returns
+ */
+export const update = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  pageId: string,
+  titlePlainText?: string,
+  parameters?: IUpdateParameters
+): Promise<IRawNotionClientSDKTypes.CreatePageResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const updatePageParameters: IRawNotionClientSDKTypes.UpdatePageParameters = {
+    page_id: pageId,
+  };
+
+  if (titlePlainText) {
+    updatePageParameters.properties = {
+      title: [
+        {
+          text: {
+            content: titlePlainText,
+          },
+        },
+      ],
+    };
+  }
+
+  // 如果有额外的参数，则进行合并
+  const mergedParams = _.merge(parameters, updatePageParameters);
+
+  return notionClientSDK.pages.update(mergedParams);
 };

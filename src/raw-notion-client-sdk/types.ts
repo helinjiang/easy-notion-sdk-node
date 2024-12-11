@@ -1,6 +1,11 @@
 import { Client } from '@notionhq/client';
 
-export { CreatePageParameters, CreatePageResponse, BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints';
+export {
+  CreatePageParameters,
+  UpdatePageParameters,
+  CreatePageResponse,
+  BlockObjectRequest,
+} from '@notionhq/client/build/src/api-endpoints';
 export { ClientOptions } from '@notionhq/client/build/src/Client';
 
 export type ITokenOrClientSDK = string | Client;

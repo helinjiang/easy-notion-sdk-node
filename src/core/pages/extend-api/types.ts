@@ -27,7 +27,13 @@ export type ICreateInPageParameters = WithExclude<
   'parent' | 'properties' | 'content'
 >;
 
-export type ICreateInDatabaseParameters = ChangeToOption<
-  Pick<IRawNotionClientSDKTypes.CreatePageParameters, 'properties' | 'icon' | 'cover' | 'children'>,
-  'properties' | 'icon' | 'cover' | 'children'
+export type ICreateInDatabaseParameters = Partial<
+  Pick<IRawNotionClientSDKTypes.CreatePageParameters, 'properties' | 'icon' | 'cover' | 'children'>
+>;
+
+export type IUpdateParameters = Partial<
+  Pick<
+    IRawNotionClientSDKTypes.UpdatePageParameters,
+    'page_id' | 'properties' | 'icon' | 'cover' | 'archived' | 'in_trash'
+  >
 >;
