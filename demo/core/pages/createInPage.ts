@@ -12,9 +12,9 @@ dotenv.config();
   // https://www.notion.so/Test-Pages-1598f56b58b380e59829de226fd854c7?pvs=4
   const parentPageId = '1598f56b58b380e59829de226fd854c7';
 
-  const res = await pages.extendAPI.create(NOTION_TOKEN, parentPageId, 'hello new created page');
+  const res = await pages.extendAPI.createInPage(NOTION_TOKEN, parentPageId, 'hello new created page');
 
   const saveDir = path.join(__dirname, './cache-data');
   fse.ensureDirSync(saveDir);
-  fse.writeJsonSync(path.join(saveDir, `create-${parentPageId}.json`), res, { spaces: 2 });
+  fse.writeJsonSync(path.join(saveDir, `createInPage-${parentPageId}.json`), res, { spaces: 2 });
 })();

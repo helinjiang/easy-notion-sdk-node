@@ -114,5 +114,6 @@
     /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*"],
+  "files": ["src/global.d.ts"],
   "exclude": ["node_modules", "lib"]
 }
