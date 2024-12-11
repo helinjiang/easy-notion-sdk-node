@@ -1,0 +1,1 @@
+export { IPropertyType, IRawDefine, IRawValue } from './property-base';
