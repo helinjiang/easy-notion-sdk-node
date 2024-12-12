@@ -22,9 +22,8 @@ export interface IQueryParams {
   };
 }
 
-export type ICreateInPageParameters = WithExclude<
-  IRawNotionClientSDKTypes.CreatePageParameters,
-  'parent' | 'properties' | 'content'
+export type ICreateInPageParameters = Partial<
+  Pick<IRawNotionClientSDKTypes.CreatePageParameters, 'properties' | 'icon' | 'cover' | 'children'>
 >;
 
 export type ICreateInDatabaseParameters = Partial<
