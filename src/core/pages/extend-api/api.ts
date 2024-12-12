@@ -118,6 +118,29 @@ export const createInDatabase = async (
 };
 
 /**
+ * 检索页面的信息
+ * https://developers.notion.com/reference/retrieve-a-page
+ * @param notionTokenOrClientSDK
+ * @param pageId 文档 ID
+ * @param filterProperties 指定要过滤出的属性，结果只会有指定的属性
+ * @returns
+ */
+export const retrieve = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  pageId: string,
+  filterProperties?: Array<string>
+): Promise<IRawNotionClientSDKTypes.GetPageResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const mergedParams: IRawNotionClientSDKTypes.GetPageParameters = {
+    page_id: pageId,
+    filter_properties: filterProperties,
+  };
+
+  return notionClientSDK.pages.retrieve(mergedParams);
+};
+
+/**
  * 更新一篇文档的属性，比如标题、是否移动到垃圾箱等
  * https://developers.notion.com/reference/patch-page
  * @param notionTokenOrClientSDK
@@ -130,7 +153,7 @@ export const updateProperties = async (
   notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   pageId: string,
   parameters?: IUpdateParameters
-): Promise<IRawNotionClientSDKTypes.CreatePageResponse> => {
+): Promise<IRawNotionClientSDKTypes.UpdatePageResponse> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
   const updatePageParameters: IRawNotionClientSDKTypes.UpdatePageParameters = {

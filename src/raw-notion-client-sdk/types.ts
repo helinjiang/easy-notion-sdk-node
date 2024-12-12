@@ -2,8 +2,11 @@ import { Client } from '@notionhq/client';
 
 export {
   CreatePageParameters,
-  UpdatePageParameters,
   CreatePageResponse,
+  UpdatePageParameters,
+  UpdatePageResponse,
+  GetPageParameters,
+  GetPageResponse,
   BlockObjectRequest,
 } from '@notionhq/client/build/src/api-endpoints';
 export { ClientOptions } from '@notionhq/client/build/src/Client';
