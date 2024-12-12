@@ -51,7 +51,7 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('retrieve()', function () {
     it('check SAMPLE.BASE_PAGE', async () => {
       const res = await retrieve(NOTION_TOKEN, SAMPLE.BASE_PAGE.id);
-      const EXPECT_DATA = SAMPLE.BASE_PAGE.retrieveRes;
+      const expectedData = SAMPLE.BASE_PAGE.retrieveRes;
 
       // 检查下基本信息
       const checkedBaseInfoProperties = [
@@ -67,7 +67,30 @@ describe('./core/pages/extend-api/api.ts', function () {
         'public_url',
       ];
       const resBasicInfo = _.pick(res, checkedBaseInfoProperties);
-      const expectBasicInfoExpect = _.pick(EXPECT_DATA, checkedBaseInfoProperties);
+      const expectBasicInfoExpect = _.pick(expectedData, checkedBaseInfoProperties);
+
+      expect(resBasicInfo).to.eql(expectBasicInfoExpect);
+    });
+
+    it('check SAMPLE.PAGE_IN_DATABASE_L1M00', async () => {
+      const res = await retrieve(NOTION_TOKEN, SAMPLE.PAGE_IN_DATABASE_L1M00.id);
+      const expectedData = SAMPLE.PAGE_IN_DATABASE_L1M00.retrieveRes;
+
+      // 检查下基本信息
+      const checkedBaseInfoProperties = [
+        'object',
+        'id',
+        'cover',
+        'icon',
+        'parent',
+        'archived',
+        'in_trash',
+        'properties',
+        'url',
+        'public_url',
+      ];
+      const resBasicInfo = _.pick(res, checkedBaseInfoProperties);
+      const expectBasicInfoExpect = _.pick(expectedData, checkedBaseInfoProperties);
 
       expect(resBasicInfo).to.eql(expectBasicInfoExpect);
     });
