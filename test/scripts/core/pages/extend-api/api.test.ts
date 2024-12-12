@@ -23,12 +23,9 @@ describe('./core/pages/extend-api/api.ts', function () {
 
   describe('basic check', function () {
     it('check export', () => {
-      expect(Object.keys(allExported)).to.include.members([
-        'createInPage',
-        'createInDatabase',
-        'updateProperties',
-        'retrieve',
-      ]);
+      expect(Object.keys(allExported).sort()).to.eql(
+        ['createInPage', 'createInDatabase', 'updateProperties', 'retrieve', 'changePageTitle'].sort()
+      );
     });
 
     it('createInPage should be function', () => {
@@ -49,6 +46,8 @@ describe('./core/pages/extend-api/api.ts', function () {
   });
 
   describe('retrieve()', function () {
+    this.timeout(3000);
+
     it('check SAMPLE.BASE_PAGE', async () => {
       const res = await retrieve(NOTION_TOKEN, SAMPLE.BASE_PAGE.id);
       const expectedData = SAMPLE.BASE_PAGE.retrieveRes;

@@ -120,6 +120,9 @@ export const createInDatabase = async (
 /**
  * 检索页面的信息
  * https://developers.notion.com/reference/retrieve-a-page
+ * 特别注意，对于页面的属性中引用值，最多只会返回 25 个引用值，
+ * 如果要获取完整的列表，则需要用 retrievePropertyItems 接口
+ *
  * @param notionTokenOrClientSDK
  * @param pageId 文档 ID
  * @param filterProperties 指定要过滤出的属性，结果只会有指定的属性
@@ -145,7 +148,6 @@ export const retrieve = async (
  * https://developers.notion.com/reference/patch-page
  * @param notionTokenOrClientSDK
  * @param pageId 文档 ID
- * @param titlePlainText 文档标题
  * @param parameters 额外的参数
  * @returns
  */
@@ -180,6 +182,40 @@ export const updateProperties = async (
 
   // 合并其他参数
   const mergedParams = _.merge(parameters, updatePageParameters);
+
+  return notionClientSDK.pages.update(mergedParams);
+};
+
+/**
+ * 更新一篇文档的标题
+ * https://developers.notion.com/reference/patch-page
+ * @param notionTokenOrClientSDK
+ * @param pageId 文档 ID
+ * @param titlePlainText 文档标题
+ * @returns
+ */
+export const changePageTitle = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  pageId: string,
+  titlePlainText: string
+): Promise<IRawNotionClientSDKTypes.UpdatePageResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const updatePageParameters: IRawNotionClientSDKTypes.UpdatePageParameters = {
+    page_id: pageId,
+    properties: {
+      title: [
+        {
+          text: {
+            content: titlePlainText,
+          },
+        },
+      ],
+    },
+  };
+
+  // 合并其他参数
+  const mergedParams = _.merge({}, updatePageParameters);
 
   return notionClientSDK.pages.update(mergedParams);
 };
