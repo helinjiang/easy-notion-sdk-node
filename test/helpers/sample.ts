@@ -26,8 +26,13 @@ export const SAMPLE = {
     id: '15a8f56b58b380e39447e5254bfbdfb3',
   },
 
-  // https://www.notion.so/auto_test-core-pages-15a8f56b58b3807c838ee62024a7dc61?pvs=4
-  AUTO_TEST_CORE_PAGE: {
-    id: '15a8f56b58b3807c838ee62024a7dc61',
+  // https://www.notion.so/core-pages-sample-page-15a8f56b58b38019b4a8e911ac7a32e2?pvs=4
+  AUTO_TEST_CORE_PAGE_SAMPLE_PAGE: {
+    id: '15a8f56b58b38019b4a8e911ac7a32e2',
+  },
+
+  // https://www.notion.so/15a8f56b58b38078ae28cd3c3b4c7dd3?v=15a8f56b58b3810c93f8000cb296efd7&pvs=4
+  AUTO_TEST_CORE_PAGE_SAMPLE_DATABASE: {
+    id: '15a8f56b58b38078ae28cd3c3b4c7dd3',
   },
 };

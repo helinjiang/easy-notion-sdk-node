@@ -3,6 +3,7 @@ import fse from 'fs-extra';
 import dotenv from 'dotenv';
 
 import { pages } from '../../../src/core/pages';
+import { getCurTimeToDisplay } from '../../../src/helpers/date';
 
 dotenv.config();
 
@@ -12,8 +13,9 @@ dotenv.config();
 
   // https://www.notion.so/1598f56b58b3808c8537f758b86996ae
   const parentPageId = '1598f56b58b3808c8537f758b86996ae';
+  const title = `new created page in database at ${getCurTimeToDisplay()}`;
 
-  const res = await pages.extendAPI.createInDatabase(NOTION_TOKEN, parentPageId, 'hello new created page333', {
+  const res = await pages.extendAPI.createInDatabase(NOTION_TOKEN, parentPageId, title, {
     properties: {
       备注: {
         rich_text: [

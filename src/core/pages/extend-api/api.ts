@@ -36,20 +36,10 @@ export const createInPage = async (
     },
   };
 
-  // 如果有额外的参数，则进行合并
-  if (parameters?.icon) {
-    createPageParameters.icon = parameters.icon;
-  }
+  // 合并其他参数
+  const mergedParams = _.merge(parameters, createPageParameters);
 
-  if (parameters?.cover) {
-    createPageParameters.cover = parameters.cover;
-  }
-
-  if (parameters?.children) {
-    createPageParameters.children = parameters.children;
-  }
-
-  return notionClientSDK.pages.create(createPageParameters);
+  return notionClientSDK.pages.create(mergedParams);
 };
 
 /**
@@ -90,7 +80,7 @@ export const createInDatabase = async (
     createPageParameters.properties = {
       ...parameters.properties,
 
-      名称: {
+      title: {
         title: [
           {
             text: {
@@ -102,19 +92,10 @@ export const createInDatabase = async (
     };
   }
 
-  if (parameters?.icon) {
-    createPageParameters.icon = parameters.icon;
-  }
+  // 合并其他参数
+  const mergedParams = _.merge(parameters, createPageParameters);
 
-  if (parameters?.cover) {
-    createPageParameters.cover = parameters.cover;
-  }
-
-  if (parameters?.children) {
-    createPageParameters.children = parameters.children;
-  }
-
-  return notionClientSDK.pages.create(createPageParameters);
+  return notionClientSDK.pages.create(mergedParams);
 };
 
 /**
@@ -135,10 +116,13 @@ export const retrieve = async (
 ): Promise<IRawNotionClientSDKTypes.GetPageResponse> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
-  const mergedParams: IRawNotionClientSDKTypes.GetPageParameters = {
+  const getPageParameters: IRawNotionClientSDKTypes.GetPageParameters = {
     page_id: pageId,
     filter_properties: filterProperties,
   };
+
+  // 合并其他参数
+  const mergedParams = _.merge({}, getPageParameters);
 
   return notionClientSDK.pages.retrieve(mergedParams);
 };

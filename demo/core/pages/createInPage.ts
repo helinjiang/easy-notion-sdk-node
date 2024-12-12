@@ -13,7 +13,7 @@ dotenv.config();
 
   // https://www.notion.so/Test-Pages-1598f56b58b380e59829de226fd854c7?pvs=4
   const parentPageId = '1598f56b58b380e59829de226fd854c7';
-  const title = `new created page at ${getCurTimeToDisplay()}`;
+  const title = `new created page in page at ${getCurTimeToDisplay()}`;
 
   const res = await pages.extendAPI.createInPage(NOTION_TOKEN, parentPageId, title, {
     children: [
