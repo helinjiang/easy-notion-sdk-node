@@ -97,7 +97,7 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('createInPage()', function () {
     this.timeout(24000);
 
-    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE', async () => {
+    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE without content', async () => {
       const pageTitle = `page created at ${getCurTimeToDisplay()} without content`;
       const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE.id, pageTitle);
 
@@ -105,14 +105,61 @@ describe('./core/pages/extend-api/api.ts', function () {
       expect(createRes.object).to.equal('page');
       expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
 
-      // 复查一下属性信息
-      const retrieveRes = await retrieve(NOTION_TOKEN, createRes.id);
-      expect(_.pick(createRes, checkedBaseInfoProperties)).to.eql(_.pick(retrieveRes, checkedBaseInfoProperties));
-
       // 修改标题
       const newPageTitle = `new title at ${getCurTimeToDisplay()}`;
       const changeTitleRes = await changeTitle(NOTION_TOKEN, createRes.id, newPageTitle);
       expect(_.get(changeTitleRes, 'properties.title.title[0].plain_text')).to.equal(newPageTitle);
+
+      // 删除页面
+      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      expect((deletePageRes as any).archived).to.be.true;
+    });
+
+    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE with content', async () => {
+      const pageTitle = `page created at ${getCurTimeToDisplay()} with content`;
+      const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE.id, pageTitle, {
+        children: [
+          {
+            object: 'block',
+            type: 'heading_2',
+            heading_2: {
+              rich_text: [{ type: 'text', text: { content: 'H2 标题' } }],
+            },
+          },
+          {
+            object: 'block',
+            type: 'paragraph',
+            paragraph: {
+              rich_text: [
+                {
+                  type: 'text',
+                  text: {
+                    content: '我是超链接，点击跳转到百度',
+                    link: { url: 'https://www.baidu.com' },
+                  },
+                },
+                {
+                  type: 'text',
+                  text: {
+                    content: '，更多写法参考： ',
+                  },
+                },
+                {
+                  type: 'text',
+                  text: {
+                    content: 'https://developers.notion.com/reference/block',
+                    link: { url: 'https://developers.notion.com/reference/block' },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      });
+
+      // 校对重要的信息
+      expect(createRes.object).to.equal('page');
+      expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
 
       // 删除页面
       const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);

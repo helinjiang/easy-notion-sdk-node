@@ -24,7 +24,6 @@ dotenv.config();
           rich_text: [{ type: 'text', text: { content: 'H2 标题' } }],
         },
       },
-      //https://developers.notion.com/reference/block
       {
         object: 'block',
         type: 'paragraph',
