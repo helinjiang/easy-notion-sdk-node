@@ -10,7 +10,8 @@ dotenv.config();
   const NOTION_TOKEN = process.env.NOTION_TOKEN!!;
 
   // https://www.notion.so/Test-Pages-1598f56b58b380e59829de226fd854c7?pvs=4
-  const pageId = '1598f56b58b380e59829de226fd854c7';
+  // https://www.notion.so/database-page-1598f56b58b3812abefddba2d8ced33e?pvs=4
+  const pageId = '1598f56b58b3812abefddba2d8ced33e';
   const res = await pages.extendAPI.retrieve(NOTION_TOKEN, pageId);
 
   const saveDir = path.join(__dirname, './cache-data');
