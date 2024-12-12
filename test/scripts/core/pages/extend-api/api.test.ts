@@ -11,6 +11,8 @@ import {
   retrieve,
 } from '../../../../../src/core/pages/extend-api/api';
 
+import * as allExported from '../../../../../src/core/pages/extend-api/api';
+
 describe('./core/pages/extend-api/api.ts', function () {
   let NOTION_TOKEN: string;
 
@@ -20,6 +22,15 @@ describe('./core/pages/extend-api/api.ts', function () {
   });
 
   describe('basic check', function () {
+    it('check export', () => {
+      expect(Object.keys(allExported)).to.include.members([
+        'createInPage',
+        'createInDatabase',
+        'updateProperties',
+        'retrieve',
+      ]);
+    });
+
     it('createInPage should be function', () => {
       expect(createInPage).to.be.a('function');
     });
