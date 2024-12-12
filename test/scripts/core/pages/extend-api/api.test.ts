@@ -9,6 +9,8 @@ import {
   createInDatabase,
   updateProperties,
   retrieve,
+  changeTitle,
+  deletePage,
 } from '../../../../../src/core/pages/extend-api/api';
 
 import * as allExported from '../../../../../src/core/pages/extend-api/api';
@@ -38,7 +40,7 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('basic check', function () {
     it('check export', () => {
       expect(Object.keys(allExported).sort()).to.eql(
-        ['createInPage', 'createInDatabase', 'updateProperties', 'retrieve', 'changePageTitle'].sort()
+        ['createInPage', 'createInDatabase', 'updateProperties', 'retrieve', 'changeTitle', 'deletePage'].sort()
       );
     });
 
@@ -56,6 +58,14 @@ describe('./core/pages/extend-api/api.ts', function () {
 
     it('retrieve should be function', () => {
       expect(retrieve).to.be.a('function');
+    });
+
+    it('changeTitle should be function', () => {
+      expect(changeTitle).to.be.a('function');
+    });
+
+    it('deletePage should be function', () => {
+      expect(deletePage).to.be.a('function');
     });
   });
 
@@ -85,7 +95,7 @@ describe('./core/pages/extend-api/api.ts', function () {
   });
 
   describe('createInPage()', function () {
-    this.timeout(8000);
+    this.timeout(24000);
 
     it('create page under SAMPLE.AUTO_TEST_CORE_PAGE', async () => {
       const pageTitle = `page created at ${getCurTimeToDisplay()} without content`;
@@ -98,6 +108,15 @@ describe('./core/pages/extend-api/api.ts', function () {
       // 复查一下属性信息
       const retrieveRes = await retrieve(NOTION_TOKEN, createRes.id);
       expect(_.pick(createRes, checkedBaseInfoProperties)).to.eql(_.pick(retrieveRes, checkedBaseInfoProperties));
+
+      // 修改标题
+      const newPageTitle = `new title at ${getCurTimeToDisplay()}`;
+      const changeTitleRes = await changeTitle(NOTION_TOKEN, createRes.id, newPageTitle);
+      expect(_.get(changeTitleRes, 'properties.title.title[0].plain_text')).to.equal(newPageTitle);
+
+      // 删除页面
+      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      expect((deletePageRes as any).archived).to.be.true;
     });
   });
 });
