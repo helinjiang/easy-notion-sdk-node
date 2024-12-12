@@ -25,4 +25,9 @@ export const SAMPLE = {
   BASE_DATABASE: {
     id: '15a8f56b58b380e39447e5254bfbdfb3',
   },
+
+  // https://www.notion.so/auto_test-core-pages-15a8f56b58b3807c838ee62024a7dc61?pvs=4
+  AUTO_TEST_CORE_PAGE: {
+    id: '15a8f56b58b3807c838ee62024a7dc61',
+  },
 };
