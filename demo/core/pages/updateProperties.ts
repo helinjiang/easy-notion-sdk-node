@@ -12,9 +12,11 @@ dotenv.config();
   // https://www.notion.so/test-sample-update-1598f56b58b3802f8f26eed034135046?pvs=4
   const pageId = '1598f56b58b3802f8f26eed034135046';
 
-  const res = await pages.extendAPI.update(NOTION_TOKEN, pageId, `【test-sample】update ${Math.random().toFixed(5)}`);
+  const res = await pages.extendAPI.updateProperties(NOTION_TOKEN, pageId, {
+    title: `【test-sample】update ${Math.random().toFixed(5)}`,
+  });
 
   const saveDir = path.join(__dirname, './cache-data');
   fse.ensureDirSync(saveDir);
-  fse.writeJsonSync(path.join(saveDir, `update-${pageId}.json`), res, { spaces: 2 });
+  fse.writeJsonSync(path.join(saveDir, `updateProperties-${pageId}.json`), res, { spaces: 2 });
 })();

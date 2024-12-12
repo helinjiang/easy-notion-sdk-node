@@ -36,4 +36,6 @@ export type IUpdateParameters = Partial<
     IRawNotionClientSDKTypes.UpdatePageParameters,
     'page_id' | 'properties' | 'icon' | 'cover' | 'archived' | 'in_trash'
   >
->;
+> & {
+  title?: string;
+};

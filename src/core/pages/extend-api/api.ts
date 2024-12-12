@@ -118,18 +118,17 @@ export const createInDatabase = async (
 };
 
 /**
- * 更新一篇文档的信息
- * https://developers.notion.com/reference/post-page
+ * 更新一篇文档的属性，比如标题、是否移动到垃圾箱等
+ * https://developers.notion.com/reference/patch-page
  * @param notionTokenOrClientSDK
  * @param pageId 文档 ID
  * @param titlePlainText 文档标题
  * @param parameters 额外的参数
  * @returns
  */
-export const update = async (
+export const updateProperties = async (
   notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   pageId: string,
-  titlePlainText?: string,
   parameters?: IUpdateParameters
 ): Promise<IRawNotionClientSDKTypes.CreatePageResponse> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
@@ -138,19 +137,25 @@ export const update = async (
     page_id: pageId,
   };
 
-  if (titlePlainText) {
+  // 标题
+  if (parameters?.title) {
     updatePageParameters.properties = {
       title: [
         {
           text: {
-            content: titlePlainText,
+            content: parameters?.title,
           },
         },
       ],
     };
   }
 
-  // 如果有额外的参数，则进行合并
+  // 其他属性
+  if (parameters?.properties) {
+    updatePageParameters.properties = _.merge(parameters?.properties, updatePageParameters.properties);
+  }
+
+  // 合并其他参数
   const mergedParams = _.merge(parameters, updatePageParameters);
 
   return notionClientSDK.pages.update(mergedParams);
