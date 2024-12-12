@@ -194,14 +194,12 @@ export const updateProperties = async (
  * @param titlePlainText 文档标题
  * @returns
  */
-export const changePageTitle = async (
+export const changeTitle = async (
   notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   pageId: string,
   titlePlainText: string
 ): Promise<IRawNotionClientSDKTypes.UpdatePageResponse> => {
-  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
-
-  const updatePageParameters: IRawNotionClientSDKTypes.UpdatePageParameters = {
+  return updateProperties(notionTokenOrClientSDK, pageId, {
     page_id: pageId,
     properties: {
       title: [
@@ -212,10 +210,23 @@ export const changePageTitle = async (
         },
       ],
     },
-  };
+  });
+};
 
-  // 合并其他参数
-  const mergedParams = _.merge({}, updatePageParameters);
-
-  return notionClientSDK.pages.update(mergedParams);
+/**
+ * 删除文档
+ * https://developers.notion.com/reference/patch-page
+ * @param notionTokenOrClientSDK
+ * @param pageId 文档 ID
+ * @returns
+ */
+export const deletePage = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  pageId: string
+): Promise<IRawNotionClientSDKTypes.UpdatePageResponse> => {
+  // https://developers.notion.com/reference/archive-a-page
+  return updateProperties(notionTokenOrClientSDK, pageId, {
+    page_id: pageId,
+    archived: true, // or in_trash: true
+  });
 };

@@ -9,11 +9,12 @@ dotenv.config();
   // 读取环境变量
   const NOTION_TOKEN = process.env.NOTION_TOKEN!!;
 
-  // https://www.notion.so/Test-Pages-1598f56b58b380e59829de226fd854c7?pvs=4
+  // https://www.notion.so/new-title-0-92577-15a8f56b58b381a1a028d230d7c7713f?pvs=4
   const pageId = '15a8f56b58b381a1a028d230d7c7713f';
-  const res = await pages.extendAPI.retrieve(NOTION_TOKEN, pageId);
+
+  const res = await pages.extendAPI.deletePage(NOTION_TOKEN, pageId);
 
   const saveDir = path.join(__dirname, './cache-data');
   fse.ensureDirSync(saveDir);
-  fse.writeJsonSync(path.join(saveDir, `retrieve-${pageId}.json`), res, { spaces: 2 });
+  fse.writeJsonSync(path.join(saveDir, `deletePage-${pageId}.json`), res, { spaces: 2 });
 })();

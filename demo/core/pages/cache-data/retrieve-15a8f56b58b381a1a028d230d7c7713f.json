@@ -2,7 +2,7 @@
   "object": "page",
   "id": "15a8f56b-58b3-81a1-a028-d230d7c7713f",
   "created_time": "2024-12-12T14:02:00.000Z",
-  "last_edited_time": "2024-12-12T14:11:00.000Z",
+  "last_edited_time": "2024-12-12T14:23:00.000Z",
   "created_by": {
     "object": "user",
     "id": "4060ce35-92bc-4638-9d2d-2ad2fae1dd7b"
@@ -17,8 +17,8 @@
     "type": "page_id",
     "page_id": "15a8f56b-58b3-807c-838e-e62024a7dc61"
   },
-  "archived": false,
-  "in_trash": false,
+  "archived": true,
+  "in_trash": true,
   "properties": {
     "title": {
       "id": "title",
@@ -27,7 +27,7 @@
         {
           "type": "text",
           "text": {
-            "content": "new title 0.01335",
+            "content": "new title 0.21022",
             "link": null
           },
           "annotations": {
@@ -38,13 +38,13 @@
             "code": false,
             "color": "default"
           },
-          "plain_text": "new title 0.01335",
+          "plain_text": "new title 0.21022",
           "href": null
         }
       ]
     }
   },
-  "url": "https://www.notion.so/new-title-0-01335-15a8f56b58b381a1a028d230d7c7713f",
+  "url": "https://www.notion.so/new-title-0-21022-15a8f56b58b381a1a028d230d7c7713f",
   "public_url": null,
-  "request_id": "03445866-61da-4fed-8ec4-086cedd68efe"
+  "request_id": "c0c558e6-e664-4511-ad5e-612f8418b07c"
 }
