@@ -94,6 +94,29 @@ describe('./core/pages/extend-api/api.ts', function () {
 
       expect(resBasicInfo).to.eql(expectBasicInfoExpect);
     });
+
+    it('check SAMPLE.PAGE_IN_DATABASE_L21M11', async () => {
+      const res = await retrieve(NOTION_TOKEN, SAMPLE.PAGE_IN_DATABASE_L21M11.id);
+      const expectedData = SAMPLE.PAGE_IN_DATABASE_L21M11.retrieveRes;
+
+      // 检查下基本信息
+      const checkedBaseInfoProperties = [
+        'object',
+        'id',
+        'cover',
+        'icon',
+        'parent',
+        'archived',
+        'in_trash',
+        'properties',
+        'url',
+        'public_url',
+      ];
+      const resBasicInfo = _.pick(res, checkedBaseInfoProperties);
+      const expectBasicInfoExpect = _.pick(expectedData, checkedBaseInfoProperties);
+
+      expect(resBasicInfo).to.eql(expectBasicInfoExpect);
+    });
   });
 
   // describe('createInPage()', function () {
