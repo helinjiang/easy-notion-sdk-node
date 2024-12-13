@@ -2,7 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import _ from 'lodash';
 
-import { SAMPLE, getCurTimeToDisplay, SAMPLE_BLOCKS } from '../../../../helpers';
+import { getCurTimeToDisplay, SAMPLE_BLOCKS, SAMPLE_DATABASES, SAMPLE_PAGES } from '../../../../helpers';
 
 import {
   createInPage,
@@ -72,23 +72,23 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('retrieve()', function () {
     this.timeout(8000);
 
-    it('check SAMPLE.BASE_PAGE', async () => {
-      const res = await retrieve(NOTION_TOKEN, SAMPLE.BASE_PAGE.id);
-      const expectedData = SAMPLE.BASE_PAGE.retrieveRes;
+    it('check SAMPLE_PAGES.BASE', async () => {
+      const res = await retrieve(NOTION_TOKEN, SAMPLE_PAGES.BASE.id);
+      const expectedData = SAMPLE_PAGES.BASE.retrieveRes;
 
       expect(_.pick(res, checkedBaseInfoProperties)).to.eql(_.pick(expectedData, checkedBaseInfoProperties));
     });
 
-    it('check SAMPLE.PAGE_IN_DATABASE_L1M00', async () => {
-      const res = await retrieve(NOTION_TOKEN, SAMPLE.PAGE_IN_DATABASE_L1M00.id);
-      const expectedData = SAMPLE.PAGE_IN_DATABASE_L1M00.retrieveRes;
+    it('check SAMPLE_PAGES.PAGE_IN_DATABASE_L1M00', async () => {
+      const res = await retrieve(NOTION_TOKEN, SAMPLE_PAGES.PAGE_IN_DATABASE_L1M00.id);
+      const expectedData = SAMPLE_PAGES.PAGE_IN_DATABASE_L1M00.retrieveRes;
 
       expect(_.pick(res, checkedBaseInfoProperties)).to.eql(_.pick(expectedData, checkedBaseInfoProperties));
     });
 
-    it('check SAMPLE.PAGE_IN_DATABASE_L21M11', async () => {
-      const res = await retrieve(NOTION_TOKEN, SAMPLE.PAGE_IN_DATABASE_L21M11.id);
-      const expectedData = SAMPLE.PAGE_IN_DATABASE_L21M11.retrieveRes;
+    it('check SAMPLE_PAGES.PAGE_IN_DATABASE_L21M11', async () => {
+      const res = await retrieve(NOTION_TOKEN, SAMPLE_PAGES.PAGE_IN_DATABASE_L21M11.id);
+      const expectedData = SAMPLE_PAGES.PAGE_IN_DATABASE_L21M11.retrieveRes;
 
       expect(_.pick(res, checkedBaseInfoProperties)).to.eql(_.pick(expectedData, checkedBaseInfoProperties));
     });
@@ -97,9 +97,9 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('createInPage()', function () {
     this.timeout(24000);
 
-    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE without content', async () => {
+    it('create page under SAMPLE_PAGES.AUTO_TEST_CORE_PAGE_SAMPLE without content', async () => {
       const pageTitle = `createInPage created at ${getCurTimeToDisplay()} without content`;
-      const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle);
+      const createRes = await createInPage(NOTION_TOKEN, SAMPLE_PAGES.AUTO_TEST_CORE_PAGE_SAMPLE.id, pageTitle);
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
@@ -115,9 +115,9 @@ describe('./core/pages/extend-api/api.ts', function () {
       expect((deletePageRes as any).archived).to.be.true;
     });
 
-    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE with content', async () => {
+    it('create page under SAMPLE_PAGES.AUTO_TEST_CORE_PAGE_SAMPLE with content', async () => {
       const pageTitle = `createInPage created at ${getCurTimeToDisplay()} with content`;
-      const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle, {
+      const createRes = await createInPage(NOTION_TOKEN, SAMPLE_PAGES.AUTO_TEST_CORE_PAGE_SAMPLE.id, pageTitle, {
         children: SAMPLE_BLOCKS.BASE,
       });
 
@@ -134,9 +134,9 @@ describe('./core/pages/extend-api/api.ts', function () {
   describe('createInDatabase()', function () {
     this.timeout(24000);
 
-    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_DATABASE without content', async () => {
+    it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE without content', async () => {
       const pageTitle = `createInDatabase created at ${getCurTimeToDisplay()} without content`;
-      const createRes = await createInDatabase(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_DATABASE.id, pageTitle);
+      const createRes = await createInDatabase(NOTION_TOKEN, SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE.id, pageTitle);
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
@@ -152,11 +152,16 @@ describe('./core/pages/extend-api/api.ts', function () {
       expect((deletePageRes as any).archived).to.be.true;
     });
 
-    it('create page under SAMPLE.AUTO_TEST_CORE_PAGE with content', async () => {
+    it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE with content', async () => {
       const pageTitle = `createInDatabase created at ${getCurTimeToDisplay()} with content`;
-      const createRes = await createInDatabase(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle, {
-        children: SAMPLE_BLOCKS.BASE,
-      });
+      const createRes = await createInDatabase(
+        NOTION_TOKEN,
+        SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE.id,
+        pageTitle,
+        {
+          children: SAMPLE_BLOCKS.BASE,
+        }
+      );
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
