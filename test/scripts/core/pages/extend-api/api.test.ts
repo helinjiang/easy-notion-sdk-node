@@ -2,7 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import _ from 'lodash';
 
-import { SAMPLE, getCurTimeToDisplay } from '../../../../helpers';
+import { SAMPLE, getCurTimeToDisplay, SAMPLE_BLOCKS } from '../../../../helpers';
 
 import {
   createInPage,
@@ -98,7 +98,7 @@ describe('./core/pages/extend-api/api.ts', function () {
     this.timeout(24000);
 
     it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE without content', async () => {
-      const pageTitle = `page created at ${getCurTimeToDisplay()} without content`;
+      const pageTitle = `createInPage created at ${getCurTimeToDisplay()} without content`;
       const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle);
 
       // 校对重要的信息
@@ -116,45 +116,9 @@ describe('./core/pages/extend-api/api.ts', function () {
     });
 
     it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE with content', async () => {
-      const pageTitle = `page created at ${getCurTimeToDisplay()} with content`;
+      const pageTitle = `createInPage created at ${getCurTimeToDisplay()} with content`;
       const createRes = await createInPage(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle, {
-        children: [
-          {
-            object: 'block',
-            type: 'heading_2',
-            heading_2: {
-              rich_text: [{ type: 'text', text: { content: 'H2 标题' } }],
-            },
-          },
-          {
-            object: 'block',
-            type: 'paragraph',
-            paragraph: {
-              rich_text: [
-                {
-                  type: 'text',
-                  text: {
-                    content: '我是超链接，点击跳转到百度',
-                    link: { url: 'https://www.baidu.com' },
-                  },
-                },
-                {
-                  type: 'text',
-                  text: {
-                    content: '，更多写法参考： ',
-                  },
-                },
-                {
-                  type: 'text',
-                  text: {
-                    content: 'https://developers.notion.com/reference/block',
-                    link: { url: 'https://developers.notion.com/reference/block' },
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        children: SAMPLE_BLOCKS.BASE,
       });
 
       // 校对重要的信息
@@ -171,7 +135,7 @@ describe('./core/pages/extend-api/api.ts', function () {
     this.timeout(24000);
 
     it('create page under SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_DATABASE without content', async () => {
-      const pageTitle = `page created at ${getCurTimeToDisplay()} without content`;
+      const pageTitle = `createInDatabase created at ${getCurTimeToDisplay()} without content`;
       const createRes = await createInDatabase(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_DATABASE.id, pageTitle);
 
       // 校对重要的信息
@@ -189,45 +153,9 @@ describe('./core/pages/extend-api/api.ts', function () {
     });
 
     it('create page under SAMPLE.AUTO_TEST_CORE_PAGE with content', async () => {
-      const pageTitle = `page created at ${getCurTimeToDisplay()} with content`;
+      const pageTitle = `createInDatabase created at ${getCurTimeToDisplay()} with content`;
       const createRes = await createInDatabase(NOTION_TOKEN, SAMPLE.AUTO_TEST_CORE_PAGE_SAMPLE_PAGE.id, pageTitle, {
-        children: [
-          {
-            object: 'block',
-            type: 'heading_2',
-            heading_2: {
-              rich_text: [{ type: 'text', text: { content: 'H2 标题' } }],
-            },
-          },
-          {
-            object: 'block',
-            type: 'paragraph',
-            paragraph: {
-              rich_text: [
-                {
-                  type: 'text',
-                  text: {
-                    content: '我是超链接，点击跳转到百度',
-                    link: { url: 'https://www.baidu.com' },
-                  },
-                },
-                {
-                  type: 'text',
-                  text: {
-                    content: '，更多写法参考： ',
-                  },
-                },
-                {
-                  type: 'text',
-                  text: {
-                    content: 'https://developers.notion.com/reference/block',
-                    link: { url: 'https://developers.notion.com/reference/block' },
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        children: SAMPLE_BLOCKS.BASE,
       });
 
       // 校对重要的信息

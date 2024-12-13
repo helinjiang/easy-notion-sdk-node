@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import { pages } from '../../../src/core/pages';
 import { getCurTimeToDisplay } from '../../../src/helpers/date';
+import { SAMPLE_BLOCKS } from '../../../test/helpers';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ dotenv.config();
       },
       年龄: { number: 10086 },
     },
+    children: SAMPLE_BLOCKS.BASE,
   });
 
   const saveDir = path.join(__dirname, './cache-data');
