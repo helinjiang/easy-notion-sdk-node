@@ -44,22 +44,23 @@ export const query = async (
     return res;
   }
 
-  // 如果没有更多分页，也直接返回结果
+  // 如果是分页拉取，但当前没有更多分页，也直接返回结果
   if (!res.has_more || !res.next_cursor) {
     return res;
   }
 
   let rawRecords = (res.results || []) as unknown as IRawQueryRecord[];
+  let i = 1;
 
-  console.log(`分页请求第 ${1} 次，请求参数： ${JSON.stringify(queryParams)}`);
-  console.log(`分页请求第 ${1} 次，返回数量： ${rawRecords.length} 条，耗时：${(Date.now() - t1).toFixed(0)} ms`);
-
-  let i = 2;
+  console.log(`分页请求第 ${i} 次，请求参数： ${JSON.stringify(queryParams)}`);
+  console.log(`分页请求第 ${i} 次，返回数量： ${rawRecords.length} 条，耗时：${(Date.now() - t1).toFixed(0)} ms`);
 
   // 判断是否还有记录
   while (res.has_more && res.next_cursor) {
+    i++;
+
     if (i > 10) {
-      throw new Error('query 一次性拉取的记录超过 1000 条，请筛选条件后再重试！');
+      throw new Error('query 一次性拉取的记录超过 1000 条了，请筛选条件后再重试！');
     }
 
     const tx = Date.now();
@@ -77,8 +78,6 @@ export const query = async (
 
     // 合并
     rawRecords = _.union([], rawRecords, rawRecordsNew);
-
-    i++;
   }
 
   // 直接更新 results，从外部视角看就是一次性返回的
