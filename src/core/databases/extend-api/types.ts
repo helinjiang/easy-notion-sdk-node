@@ -17,3 +17,10 @@ export type ICreateDatabaseProperties = IRawNotionClientSDKTypes.CreateDatabaseP
 export type ICreateInPageParameters = Partial<
   Pick<IRawNotionClientSDKTypes.CreateDatabaseParameters, 'icon' | 'cover' | 'description' | 'is_inline'>
 >;
+
+export type IUpdateParameters = Partial<
+  Pick<
+    IRawNotionClientSDKTypes.UpdateDatabaseParameters,
+    'title' | 'description' | 'icon' | 'cover' | 'properties' | 'is_inline' | 'archived'
+  >
+>;

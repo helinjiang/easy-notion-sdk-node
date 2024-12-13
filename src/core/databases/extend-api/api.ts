@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { IRawQueryRecord } from '../../raw-types';
 
-import { IQueryParams, ICreateDatabaseProperties, ICreateInPageParameters } from './types';
+import { IQueryParams, ICreateDatabaseProperties, ICreateInPageParameters, IUpdateParameters } from './types';
 
 /**
  * 查询 database 中的数据列表
@@ -142,4 +142,29 @@ export const retrieve = async (
   const mergedParams = _.merge({}, getPageParameters);
 
   return notionClientSDK.databases.retrieve(mergedParams);
+};
+
+/**
+ * 更新 database
+ * https://developers.notion.com/reference/update-a-database
+ * @param notionTokenOrClientSDK
+ * @param databaseId 文档 ID
+ * @param parameters 额外的参数
+ * @returns
+ */
+export const update = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  databaseId: string,
+  parameters?: IUpdateParameters
+): Promise<IRawNotionClientSDKTypes.UpdateDatabaseResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const updatePageParameters: IRawNotionClientSDKTypes.UpdateDatabaseParameters = {
+    database_id: databaseId,
+  };
+
+  // 合并其他参数
+  const mergedParams = _.merge(parameters, updatePageParameters);
+
+  return notionClientSDK.databases.update(mergedParams);
 };
