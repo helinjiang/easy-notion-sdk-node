@@ -12,6 +12,12 @@ export {
   PartialPageObjectResponse,
   QueryDatabaseParameters,
   QueryDatabaseResponse,
+  CreateDatabaseParameters,
+  CreateDatabaseResponse,
+  UpdateDatabaseParameters,
+  UpdateDatabaseResponse,
+  GetDatabaseParameters,
+  GetDatabaseResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 export { ClientOptions } from '@notionhq/client/build/src/Client';
 

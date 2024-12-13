@@ -2,9 +2,8 @@ import _ from 'lodash';
 
 import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { IRawQueryRecord } from '../../raw-types';
-import { QueryDatabaseParameters, QueryDatabaseResponse } from '../../../raw-notion-client-sdk/types';
 
-import { IQueryParams } from './types';
+import { IQueryParams, ICreateDatabaseProperties, ICreateInPageParameters } from './types';
 
 /**
  * 查询 database 中的数据列表
@@ -18,11 +17,13 @@ export const query = async (
   notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   databaseId: string,
   params?: IQueryParams
-): Promise<QueryDatabaseResponse> => {
+): Promise<IRawNotionClientSDKTypes.QueryDatabaseResponse> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
   // 获取 database 中的记录
-  const queryParams: QueryDatabaseParameters = _.merge(params?.rawQueryParams, { database_id: databaseId });
+  const queryParams: IRawNotionClientSDKTypes.QueryDatabaseParameters = _.merge(params?.rawQueryParams, {
+    database_id: databaseId,
+  });
 
   const t1 = Date.now();
 
@@ -75,4 +76,45 @@ export const query = async (
   console.log(`分页请求结束，返回数量： ${rawRecords.length} 条，总耗时：${(Date.now() - t1).toFixed(0)} ms`);
 
   return res;
+};
+
+/**
+ * 创建一个 database
+ * https://developers.notion.com/reference/create-a-database
+ *
+ * @param notionTokenOrClientSDK
+ * @param parentPageId 文档挂载的父页面ID
+ * @param titlePlainText 文档标题
+ * @param properties 属性
+ * @param parameters 额外的参数
+ * @returns
+ */
+export const createInPage = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  parentPageId: string,
+  titlePlainText: string,
+  properties: ICreateDatabaseProperties,
+  parameters?: ICreateInPageParameters
+): Promise<IRawNotionClientSDKTypes.CreateDatabaseResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const createPageParameters: IRawNotionClientSDKTypes.CreateDatabaseParameters = {
+    parent: {
+      page_id: parentPageId,
+      type: 'page_id',
+    },
+    properties,
+    title: [
+      {
+        text: {
+          content: titlePlainText,
+        },
+      },
+    ],
+  };
+
+  // 合并其他参数
+  const mergedParams = _.merge(parameters, createPageParameters);
+
+  return notionClientSDK.databases.create(mergedParams);
 };

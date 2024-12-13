@@ -1,0 +1,66 @@
+{
+  "object": "database",
+  "id": "15b8f56b-58b3-812b-b27d-d2ed31aebe7e",
+  "cover": null,
+  "icon": null,
+  "created_time": "2024-12-13T08:27:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "4060ce35-92bc-4638-9d2d-2ad2fae1dd7b"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "4060ce35-92bc-4638-9d2d-2ad2fae1dd7b"
+  },
+  "last_edited_time": "2024-12-13T08:27:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "new created database in page at 2024-12-13 16:27:57",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "new created database in page at 2024-12-13 16:27:57",
+      "href": null
+    }
+  ],
+  "description": [],
+  "is_inline": false,
+  "properties": {
+    "In stock": {
+      "id": "_AyD",
+      "name": "In stock",
+      "type": "checkbox",
+      "checkbox": {}
+    },
+    "Description": {
+      "id": "%7BJA%7D",
+      "name": "Description",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "Name": {
+      "id": "title",
+      "name": "Name",
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "page_id",
+    "page_id": "15b8f56b-58b3-80c3-8953-cefac0805ca2"
+  },
+  "url": "https://www.notion.so/15b8f56b58b3812bb27dd2ed31aebe7e",
+  "public_url": null,
+  "archived": false,
+  "in_trash": false,
+  "request_id": "58269983-9817-4386-a9c7-9a7e35e0b788"
+}
