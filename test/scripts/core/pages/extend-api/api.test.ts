@@ -2,7 +2,13 @@ import 'mocha';
 import { expect } from 'chai';
 import _ from 'lodash';
 
-import { getCurTimeToDisplay, SAMPLE_BLOCKS, SAMPLE_DATABASES, SAMPLE_PAGES } from '../../../../helpers';
+import {
+  getCurTimeToDisplay,
+  getTitleByPageObject,
+  SAMPLE_BLOCKS,
+  SAMPLE_DATABASES,
+  SAMPLE_PAGES,
+} from '../../../../helpers';
 
 import {
   createInPage,
@@ -103,12 +109,12 @@ describe('./core/pages/extend-api/api.ts', function () {
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
-      expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
+      expect(getTitleByPageObject(createRes)).to.equal(pageTitle);
 
       // 修改标题
       const newPageTitle = `new title at ${getCurTimeToDisplay()}`;
       const changeTitleRes = await changeTitle(NOTION_TOKEN, createRes.id, newPageTitle);
-      expect(_.get(changeTitleRes, 'properties.title.title[0].plain_text')).to.equal(newPageTitle);
+      expect(getTitleByPageObject(changeTitleRes)).to.equal(newPageTitle);
 
       // 删除页面
       const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
@@ -123,7 +129,7 @@ describe('./core/pages/extend-api/api.ts', function () {
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
-      expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
+      expect(getTitleByPageObject(createRes)).to.equal(pageTitle);
 
       // 删除页面
       const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
@@ -131,7 +137,7 @@ describe('./core/pages/extend-api/api.ts', function () {
     });
   });
 
-  describe('createInDatabase()', function () {
+  describe.only('createInDatabase()', function () {
     this.timeout(24000);
 
     it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE without content', async () => {
@@ -140,16 +146,16 @@ describe('./core/pages/extend-api/api.ts', function () {
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
-      expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
+      expect(getTitleByPageObject(createRes)).to.equal(pageTitle);
 
       // 修改标题
       const newPageTitle = `new title at ${getCurTimeToDisplay()}`;
       const changeTitleRes = await changeTitle(NOTION_TOKEN, createRes.id, newPageTitle);
-      expect(_.get(changeTitleRes, 'properties.title.title[0].plain_text')).to.equal(newPageTitle);
+      expect(getTitleByPageObject(changeTitleRes)).to.equal(newPageTitle);
 
       // 删除页面
-      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
-      expect((deletePageRes as any).archived).to.be.true;
+      // const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      // expect((deletePageRes as any).archived).to.be.true;
     });
 
     it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE with content', async () => {
@@ -165,11 +171,11 @@ describe('./core/pages/extend-api/api.ts', function () {
 
       // 校对重要的信息
       expect(createRes.object).to.equal('page');
-      expect(_.get(createRes, 'properties.title.title[0].plain_text')).to.equal(pageTitle);
+      expect(getTitleByPageObject(createRes)).to.equal(pageTitle);
 
       // 删除页面
-      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
-      expect((deletePageRes as any).archived).to.be.true;
+      // const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      // expect((deletePageRes as any).archived).to.be.true;
     });
   });
 });

@@ -1,3 +1,7 @@
+import _ from 'lodash';
+
+import { PageObjectResponse, PartialPageObjectResponse } from '../../src/raw-notion-client-sdk/types';
+
 import retrieveBasePageRes from '../data/fixtures/sample-page/retrieve-15a8f56b58b3807890b4de761706988f.json';
 import retrievePageInDatabaseL1M00Res from '../data/fixtures/sample-page/retrieve-15a8f56b58b38174a5bbe82b14eedb2b.json';
 import retrievePageInDatabaseL21M11Res from '../data/fixtures/sample-page/retrieve-15a8f56b58b3808bbdc9dfad24364e7f.json';
@@ -25,4 +29,37 @@ export const SAMPLE_PAGES = {
   AUTO_TEST_CORE_PAGE_SAMPLE: {
     id: '15a8f56b58b38019b4a8e911ac7a32e2',
   },
+};
+
+/**
+ * 根据页面对象获取标题
+ *
+ * @param pageObject
+ * @returns {string}
+ */
+
+export const getTitleByPageObject = (pageObject: Partial<PageObjectResponse>): string => {
+  if (!pageObject) {
+    return '';
+  }
+
+  const parentType = _.get(pageObject, 'parent.type');
+
+  if (parentType === 'database_id') {
+    const value = Object.values(pageObject.properties || {}).find((item) => {
+      return item.id === 'title';
+    });
+
+    if (!value) {
+      return '';
+    }
+
+    return _.get(value, 'title[0].plain_text') || '';
+  }
+
+  if (parentType === 'page_id') {
+    return _.get(pageObject, 'properties.title.title[0].plain_text') || '';
+  }
+
+  return '';
 };
