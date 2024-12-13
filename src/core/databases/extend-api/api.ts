@@ -118,3 +118,28 @@ export const createInPage = async (
 
   return notionClientSDK.databases.create(mergedParams);
 };
+
+/**
+ * 检索页面的信息
+ * https://developers.notion.com/reference/retrieve-a-database
+ *
+ * @param notionTokenOrClientSDK
+ * @param databaseId 文档 ID
+ * @param filterProperties 指定要过滤出的属性，结果只会有指定的属性
+ * @returns
+ */
+export const retrieve = async (
+  notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
+  databaseId: string
+): Promise<IRawNotionClientSDKTypes.GetDatabaseResponse> => {
+  const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
+
+  const getPageParameters: IRawNotionClientSDKTypes.GetDatabaseParameters = {
+    database_id: databaseId,
+  };
+
+  // 合并其他参数
+  const mergedParams = _.merge({}, getPageParameters);
+
+  return notionClientSDK.databases.retrieve(mergedParams);
+};
