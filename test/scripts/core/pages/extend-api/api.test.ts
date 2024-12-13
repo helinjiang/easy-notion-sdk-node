@@ -100,7 +100,7 @@ describe('./core/pages/extend-api/api.ts', function () {
     });
   });
 
-  describe('createInPage()', function () {
+  describe.skip('createInPage()', function () {
     this.timeout(24000);
 
     it('create page under SAMPLE_PAGES.AUTO_TEST_CORE_PAGE_SAMPLE without content', async () => {
@@ -137,7 +137,7 @@ describe('./core/pages/extend-api/api.ts', function () {
     });
   });
 
-  describe.only('createInDatabase()', function () {
+  describe.skip('createInDatabase()', function () {
     this.timeout(24000);
 
     it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE without content', async () => {
@@ -154,8 +154,8 @@ describe('./core/pages/extend-api/api.ts', function () {
       expect(getTitleByPageObject(changeTitleRes)).to.equal(newPageTitle);
 
       // 删除页面
-      // const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
-      // expect((deletePageRes as any).archived).to.be.true;
+      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      expect((deletePageRes as any).archived).to.be.true;
     });
 
     it('create page under SAMPLE_DATABASES.AUTO_TEST_CORE_PAGE_SAMPLE with content', async () => {
@@ -166,6 +166,23 @@ describe('./core/pages/extend-api/api.ts', function () {
         pageTitle,
         {
           children: SAMPLE_BLOCKS.BASE,
+          properties: {
+            备注: {
+              rich_text: [
+                {
+                  text: {
+                    content: `备注： create at ${getCurTimeToDisplay()} `,
+                  },
+                },
+              ],
+            },
+            性别: {
+              select: {
+                name: '男',
+              },
+            },
+            年龄: { number: Math.round(10086 * Math.random()) },
+          },
         }
       );
 
@@ -174,8 +191,8 @@ describe('./core/pages/extend-api/api.ts', function () {
       expect(getTitleByPageObject(createRes)).to.equal(pageTitle);
 
       // 删除页面
-      // const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
-      // expect((deletePageRes as any).archived).to.be.true;
+      const deletePageRes = await deletePage(NOTION_TOKEN, createRes.id);
+      expect((deletePageRes as any).archived).to.be.true;
     });
   });
 });
