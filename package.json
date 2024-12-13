@@ -6,6 +6,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "rm -rf ./lib && tsc -d",
+    "debug": "ts-node demo/core/databases/query.ts",
     "test": "npm run test:unit",
     "test:unit": "mocha 'test/**/*.test.{ts,tsx}'",
     "test:cover": "nyc npm run test:unit",

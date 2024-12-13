@@ -10,6 +10,8 @@ export {
   BlockObjectRequest,
   PageObjectResponse,
   PartialPageObjectResponse,
+  QueryDatabaseParameters,
+  QueryDatabaseResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 export { ClientOptions } from '@notionhq/client/build/src/Client';
 

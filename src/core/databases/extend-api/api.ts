@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { createNotionClientSDK, IRawNotionClientSDKTypes } from '../../../raw-notion-client-sdk';
 import { IRawQueryRecord } from '../../raw-types';
+import { QueryDatabaseParameters, QueryDatabaseResponse } from '../../../raw-notion-client-sdk/types';
 
 import { IQueryParams } from './types';
 
@@ -17,23 +18,11 @@ export const query = async (
   notionTokenOrClientSDK: IRawNotionClientSDKTypes.ITokenOrClientSDK,
   databaseId: string,
   params?: IQueryParams
-) => {
+): Promise<QueryDatabaseResponse> => {
   const notionClientSDK = createNotionClientSDK(notionTokenOrClientSDK);
 
   // 获取 database 中的记录
-  const queryParams = {
-    database_id: databaseId,
-    filter: params?.rawQueryParams?.filter,
-    // sorts: [
-    //     { property: 'Featured', direction: 'descending' },
-    //     { property: 'Published', direction: 'descending' },
-    // ],
-    // filter: {
-    //   and: [
-    //     { property: 'Published', checkbox: { equals: true } },
-    //   ],
-    // },
-  };
+  const queryParams: QueryDatabaseParameters = _.merge(params?.rawQueryParams, { database_id: databaseId });
 
   const t1 = Date.now();
 
@@ -52,6 +41,7 @@ export const query = async (
   let rawRecords = (res.results || []) as unknown as IRawQueryRecord[];
   let i = 1;
 
+  console.log(`\n分页请求开始...`);
   console.log(`分页请求第 ${i} 次，请求参数： ${JSON.stringify(queryParams)}`);
   console.log(`分页请求第 ${i} 次，返回数量： ${rawRecords.length} 条，耗时：${(Date.now() - t1).toFixed(0)} ms`);
 
@@ -82,6 +72,7 @@ export const query = async (
 
   // 直接更新 results，从外部视角看就是一次性返回的
   res.results = rawRecords as any;
+  console.log(`分页请求结束，返回数量： ${rawRecords.length} 条，总耗时：${(Date.now() - t1).toFixed(0)} ms`);
 
   return res;
 };

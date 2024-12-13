@@ -12,7 +12,12 @@ dotenv.config();
   // https://www.notion.so/1598f56b58b3808c8537f758b86996ae
   const databaseId = '1598f56b58b3808c8537f758b86996ae';
 
-  const res = await databases.extendAPI.query(NOTION_TOKEN, databaseId);
+  const res = await databases.extendAPI.query(NOTION_TOKEN, databaseId, {
+    shouldFetchAllRecords: true,
+    rawQueryParams: {
+      page_size: 3,
+    },
+  });
 
   const saveDir = path.join(__dirname, './cache-data');
   fse.ensureDirSync(saveDir);
